@@ -1,0 +1,27 @@
+{
+  "name": "ng-form-components",
+  "version": "0.0.1-beta",
+  "description": "form components by Angular",
+  "main": "./bundles/ng-form-components.umd.js",
+  "module": "./fesm5/ng-form-components.js",
+  "es2015": "./fesm2015/ng-form-components.js",
+  "esm5": "./esm5/ng-form-components.js",
+  "esm2015": "./esm2015/ng-form-components.js",
+  "fesm5": "./fesm5/ng-form-components.js",
+  "fesm2015": "./fesm2015/ng-form-components.js",
+  "typings": "./ng-form-components.d.ts",
+  "author": "nureha",
+  "license": "MIT",
+  "dependencies": {
+  },
+  "peerDependencies": {
+    "@angular/common": "^6.0.0-rc.0 || ^6.0.0",
+    "@angular/core": "^6.0.0-rc.0 || ^6.0.0",
+    "jquery": "^2.0.0",
+    "select2": "^4.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nureha/nk-packages.git"
+  }
+}
