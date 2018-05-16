@@ -31,10 +31,10 @@ const COMPONENTS = [
   providers: [
   {
     provide: ERROR_MESSAGE_FACTORY_SERVICE,
-    useExisting: NoopErrorMessageFactoryService,
+    useClass: NoopErrorMessageFactoryService,
   }, {
     provide: MULTI_IMPORT_SERVICES_MAP,
-    useExisting: EmptySelectorServiceMap,
+    useClass: EmptySelectorServiceMap,
   }],
   declarations: [...COMPONENTS],
   exports:[...COMPONENTS]

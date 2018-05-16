@@ -7,9 +7,7 @@ export interface ErrorMessageFactoryService {
   
 export const ERROR_MESSAGE_FACTORY_SERVICE = new InjectionToken<ErrorMessageFactoryService>('ERROR_MESSAGE_FACTORY_SERVICE');
   
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class NoopErrorMessageFactoryService implements ErrorMessageFactoryService {
     constructor() {}
     create(error: ValidationErrors, name: string) {
