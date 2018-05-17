@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild, ElementRef, OnInit, AfterViewInit, OnDestroy, forwardRef } from '@angular/core';
+import { Component, Input, ViewChild, OnInit, AfterViewInit, OnDestroy, forwardRef } from '@angular/core';
 import { NG_VALUE_ACCESSOR, FormControl } from '@angular/forms';
 import { Subject, Subscription } from 'rxjs';
 import { filter, combineLatest, delay } from 'rxjs/operators';
@@ -46,7 +46,7 @@ export class AfcSelect2Component extends AfcSelectBase implements OnInit, AfterV
   }
   private _readonly = false;
   public selected: Selectable = null;
-  @ViewChild('selector') selector: ElementRef;
+  @ViewChild('selector') selector;
   set data(data: Selectable[]) {
     this._data = data;
     this.renderSelect2();

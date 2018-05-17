@@ -34,19 +34,13 @@ function moveDigit(decimal: number, moves: number): number {
     return parseFloat(prefix + nums[0] + nums[1].substr(0, moves) + '.' + nums[1].substr(moves, (nums[1].length - moves)));
   // 負の変換
   } else {
-    let base = '0.';
+    const base = '0.';
     if (nums[0] === '0') {
-      for (let i = 0; i > moves; --i) {
-        base += '0';
-      }
-      return parseFloat(prefix + base + nums[1]);
+      return parseFloat(prefix + base + Array(-moves).fill('0').join('') + nums[1]);
     }
     // 計算結果が1より小さくなる場合
     if (nums[0].length <= -moves) {
-      for (let i = 0; i > (moves + nums[0].length); --i) {
-        base += '0';
-      }
-      return parseFloat(prefix + base + nums[0] + nums[1]);
+      return parseFloat(prefix + base + Array(-moves - nums[0].length).fill('0').join('') + nums[0] + nums[1]);
     }
     // それ以外の場合
     return parseFloat(prefix + nums[0].substr(0, nums[0].length + moves) + '.' + nums[0].substr(nums[0].length + moves, -moves) + nums[1]);
