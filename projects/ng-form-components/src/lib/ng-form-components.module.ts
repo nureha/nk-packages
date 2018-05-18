@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
@@ -16,8 +16,8 @@ import {
 import {
   NoopErrorMessageFactoryService,
   ERROR_MESSAGE_FACTORY_SERVICE,
-  EmptySelectorServiceMap,
-  MULTI_IMPORT_SERVICES_MAP,
+  NoopSelectorServiceInjector,
+  SELECTOR_SERVICE_INJECTOR,
 } from './services';
 
 const COMPONENTS = [
@@ -39,13 +39,15 @@ const COMPONENTS = [
     ReactiveFormsModule,
   ],
   providers: [
-  {
-    provide: ERROR_MESSAGE_FACTORY_SERVICE,
-    useClass: NoopErrorMessageFactoryService,
-  }, {
-    provide: MULTI_IMPORT_SERVICES_MAP,
-    useClass: EmptySelectorServiceMap,
-  }],
+    NoopSelectorServiceInjector,
+    {
+      provide: ERROR_MESSAGE_FACTORY_SERVICE,
+      useClass: NoopErrorMessageFactoryService,
+    }, {
+      provide: SELECTOR_SERVICE_INJECTOR,
+      useClass: NoopSelectorServiceInjector,
+    }
+  ],
   declarations: COMPONENTS,
   exports: COMPONENTS
 })

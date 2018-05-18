@@ -1,7 +1,7 @@
-import { Component, Input, forwardRef } from '@angular/core';
+import { Component, Input, forwardRef, Inject } from '@angular/core';
 import { NG_VALUE_ACCESSOR, FormControl } from '@angular/forms';
 
-import { SelectorServiceInjector, Selectable } from '../../services';
+import { SelectorServiceInjector, Selectable, SELECTOR_SERVICE_INJECTOR } from '../../services';
 import { AfcSelectBase } from './select-base.component';
 
 @Component({
@@ -20,7 +20,6 @@ import { AfcSelectBase } from './select-base.component';
     useExisting: forwardRef(() => AfcRadioComponent),
     multi: true
   },
-    SelectorServiceInjector
   ]
 })
 export class AfcRadioComponent extends AfcSelectBase {
@@ -33,9 +32,9 @@ export class AfcRadioComponent extends AfcSelectBase {
   @Input() rejects: any[] = [];
 
   constructor(
-    services: SelectorServiceInjector
+    @Inject(SELECTOR_SERVICE_INJECTOR) injector: SelectorServiceInjector,
   ) {
-    super(services);
+    super(injector);
   }
 
 }

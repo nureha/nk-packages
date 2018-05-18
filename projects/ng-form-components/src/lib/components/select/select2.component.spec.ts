@@ -3,8 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { AfcSelect2Component } from './select2.component';
 import { AfcValidateMessageComponent } from '../validate-message.component';
-import { MULTI_IMPORT_SERVICES_MAP } from '../../services';
-import { NopeErrorMessageFactoryService, ERROR_MESSAGE_FACTORY_SERVICE } from '../../services';
+import { SELECTOR_SERVICE_INJECTOR, NoopSelectorServiceInjector, ERROR_MESSAGE_FACTORY_SERVICE, NoopErrorMessageFactoryService } from '../../services';
 
 describe('AfcSelect2Component', () => {
   let component: AfcSelect2Component;
@@ -23,12 +22,10 @@ describe('AfcSelect2Component', () => {
       providers: [
       {
         provide: ERROR_MESSAGE_FACTORY_SERVICE,
-        useClass: NopeErrorMessageFactoryService,
+        useClass: NoopErrorMessageFactoryService,
       }, {
-        provide: MULTI_IMPORT_SERVICES_MAP,
-        useValue: {
-          map: new Map()
-        }
+        provide: SELECTOR_SERVICE_INJECTOR,
+        useClass: NoopSelectorServiceInjector
       }]
     })
     .compileComponents();

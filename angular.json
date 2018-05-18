@@ -138,6 +138,10 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
+            "scripts": [
+              "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/select2/dist/js/select2.min.js"
+            ],
             "main": "projects/ng-form-components/src/test.ts",
             "tsConfig": "projects/ng-form-components/tsconfig.spec.json",
             "karmaConfig": "projects/ng-form-components/karma.conf.js"

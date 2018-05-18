@@ -1,9 +1,9 @@
-import { OnInit, OnChanges, OnDestroy } from '@angular/core';
+import { OnInit, OnChanges, OnDestroy, Inject } from '@angular/core';
 import { ControlValueAccessor, FormControl, Validators } from '@angular/forms';
 import { Observable, ReplaySubject, Subject, Subscription } from 'rxjs';
 import { combineLatest, share, filter } from 'rxjs/operators';
 
-import { SelectorServiceInjector, SelectorService, Selectable, SelectorItem } from '../../services';
+import { SelectorServiceInjector, SelectorService, Selectable, SelectorItem, SELECTOR_SERVICE_INJECTOR } from '../../services';
 
 class SelectableConstruct extends Selectable implements SelectorItem {
   name: string;
@@ -91,7 +91,7 @@ export class AfcSelectBase implements OnInit, OnChanges, OnDestroy, ControlValue
   onChangePropagate: any = () => {};
 
   constructor(
-    protected services: SelectorServiceInjector
+    protected injector: SelectorServiceInjector,
   ) {
     this.subscriptions.add(this.dataPrepared$.pipe(filter(v => !!v)).pipe(
       combineLatest(this.initialized$.pipe(filter(v => !!v))),
@@ -215,7 +215,7 @@ export class AfcSelectBase implements OnInit, OnChanges, OnDestroy, ControlValue
         }
         this._service = new ArrayService();
       } else {
-        const dataSource = this.services.get(parsed.name);
+        const dataSource = this.injector.get(parsed.name);
         if (!dataSource) {
           throw Error('not exists service: ' + parsed.name);
         }

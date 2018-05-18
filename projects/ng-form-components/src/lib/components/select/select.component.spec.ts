@@ -9,7 +9,10 @@ import { share } from 'rxjs/operators';
 import { AfcSelectComponent } from './select.component';
 import { AfcCheckboxComponent } from './checkbox.component';
 import { AfcValidateMessageComponent } from '../validate-message.component';
-import { SelectorServiceInjector, SelectorService, Selectable, MULTI_IMPORT_SERVICES_MAP, ERROR_MESSAGE_FACTORY_SERVICE, NopeErrorMessageFactoryService } from '../../services';
+import {
+  SelectorServiceInjector, SelectorService, Selectable,
+  NoopErrorMessageFactoryService, ERROR_MESSAGE_FACTORY_SERVICE, NoopSelectorServiceInjector, SELECTOR_SERVICE_INJECTOR
+} from '../../services';
 
 class SelectableConstruct extends Selectable {
   name: string;
@@ -83,10 +86,6 @@ class ColorService extends ServiceStab {
   }].map(d => new SelectableConstruct(d));
 }
 
-const _map = new Map();
-_map.set('fruit', FruitService);
-_map.set('color', ColorService);
-
 @Component({
   selector: 'only-afc-select-component',
   template: `
@@ -120,15 +119,22 @@ describe('AfcSelectComponent', () => {
         ReactiveFormsModule,
         FormsModule,
       ],
-      providers: [
-        SelectorServiceInjector,
-      {
+      providers: [{
         provide: ERROR_MESSAGE_FACTORY_SERVICE,
-        useClass: NopeErrorMessageFactoryService,
+        useClass: NoopErrorMessageFactoryService,
       }, {
-        provide: MULTI_IMPORT_SERVICES_MAP,
-        useValue: {
-          map: _map
+        provide: SELECTOR_SERVICE_INJECTOR,
+        useFactory: () => {
+          return {
+            get(name: string) {
+              switch (name) {
+                case 'fruit':
+                  return new FruitService();
+                case 'color':
+                  return new ColorService();
+              }
+            }
+          };
         }
       }]
     })

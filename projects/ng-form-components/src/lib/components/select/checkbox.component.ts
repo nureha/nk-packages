@@ -3,7 +3,7 @@ import { NG_VALUE_ACCESSOR, FormControl } from '@angular/forms';
 import { filter, combineLatest, delay } from 'rxjs/operators';
 
 import { FilterService } from '../../services';
-import { SelectorServiceInjector, Selectable } from '../../services';
+import { SelectorServiceInjector, Selectable, SELECTOR_SERVICE_INJECTOR } from '../../services';
 import { AfcSelectBase } from './select-base.component';
 
 @Component({
@@ -47,9 +47,7 @@ import { AfcSelectBase } from './select-base.component';
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => AfcCheckboxComponent),
     multi: true
-  },
-    SelectorServiceInjector
-  ]
+  }]
 })
 export class AfcCheckboxComponent extends AfcSelectBase implements OnInit {
 
@@ -76,9 +74,9 @@ export class AfcCheckboxComponent extends AfcSelectBase implements OnInit {
   }
 
   constructor(
-    services: SelectorServiceInjector
+    @Inject(SELECTOR_SERVICE_INJECTOR) injector: SelectorServiceInjector,
   ) {
-    super(services);
+    super(injector);
     this.dataPrepared$.subscribe(v => this._detaPrepared = !!v);
   }
 

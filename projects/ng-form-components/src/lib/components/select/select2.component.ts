@@ -1,9 +1,9 @@
-import { Component, Input, ViewChild, OnInit, AfterViewInit, OnDestroy, forwardRef } from '@angular/core';
+import { Component, Input, ViewChild, OnInit, AfterViewInit, OnDestroy, forwardRef, Inject } from '@angular/core';
 import { NG_VALUE_ACCESSOR, FormControl } from '@angular/forms';
 import { Subject, Subscription } from 'rxjs';
 import { filter, combineLatest, delay } from 'rxjs/operators';
 
-import { SelectorServiceInjector, Selectable } from '../../services';
+import { SelectorServiceInjector, Selectable, SELECTOR_SERVICE_INJECTOR } from '../../services';
 import { AfcSelectBase } from './select-base.component';
 declare const jQuery: any;
 
@@ -25,9 +25,7 @@ declare const jQuery: any;
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => AfcSelect2Component),
     multi: true
-  },
-    SelectorServiceInjector
-  ]
+  }]
 })
 export class AfcSelect2Component extends AfcSelectBase implements OnInit, AfterViewInit, OnDestroy {
 
@@ -63,8 +61,10 @@ export class AfcSelect2Component extends AfcSelectBase implements OnInit, AfterV
 
   onChangePropagate: any = () => {};
 
-  constructor(service: SelectorServiceInjector) {
-    super(service);
+  constructor(
+    @Inject(SELECTOR_SERVICE_INJECTOR) protected injector: SelectorServiceInjector,
+  ) {
+    super(injector);
     this.mySubscriptions.add(
       this.dataPrepared$.pipe(
         combineLatest(this.preparedElement$),
