@@ -85,6 +85,9 @@ export class AfcSelect2Component extends AfcSelectBase implements OnInit, AfterV
       this.element = jQuery(this.selector.nativeElement);
       this.renderSelect2();
       this.element.on('select2:select', () => {
+        if (!this.selector) {
+          return;
+        }
         let val = this.selector.nativeElement.value;
         // FIXME 文字列だけど数字だけの値を扱うこともあるかもしれない・・・
         if (/^[0-9]+$/.test(val)) {
