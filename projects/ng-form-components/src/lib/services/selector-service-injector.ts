@@ -1,4 +1,4 @@
-import { Injectable, Injector, ReflectiveInjector, Inject, ClassProvider, InjectionToken } from '@angular/core';
+import { Injectable, InjectionToken } from '@angular/core';
 import { Observable } from 'rxjs';
 
 export interface SelectorItem {

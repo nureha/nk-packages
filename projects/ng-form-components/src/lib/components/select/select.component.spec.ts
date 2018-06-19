@@ -10,8 +10,8 @@ import { AfcSelectComponent } from './select.component';
 import { AfcCheckboxComponent } from './checkbox.component';
 import { AfcValidateMessageComponent } from '../validate-message.component';
 import {
-  SelectorServiceInjector, SelectorService, Selectable,
-  NoopErrorMessageFactoryService, ERROR_MESSAGE_FACTORY_SERVICE, NoopSelectorServiceInjector, SELECTOR_SERVICE_INJECTOR
+  SelectorService, Selectable,
+  NoopErrorMessageFactoryService, ERROR_MESSAGE_FACTORY_SERVICE, SELECTOR_SERVICE_INJECTOR
 } from '../../services';
 
 class SelectableConstruct extends Selectable {
@@ -87,7 +87,7 @@ class ColorService extends ServiceStab {
 }
 
 @Component({
-  selector: 'only-afc-select-component',
+  selector: 'afc-only-afc-select-component',
   template: `
     <afc-select *ngIf="formControl"
       [formControl]="formControl" [sourceName]="sourceName"

@@ -2,7 +2,7 @@ import {
   Component, OnInit, AfterViewInit, Input, Output, EventEmitter,
   forwardRef, Renderer2, ElementRef, HostListener
 } from '@angular/core';
-import { FormControl, NG_VALUE_ACCESSOR, ControlValueAccessor, Validators } from '@angular/forms';
+import { FormControl, NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 
 function moveDigit(decimal: number, moves: number): number {
   const nums = (decimal || 0).toString().split('.');

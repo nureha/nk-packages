@@ -1,7 +1,7 @@
 import { OnInit, OnChanges, OnDestroy, Inject } from '@angular/core';
 import { ControlValueAccessor, FormControl, Validators } from '@angular/forms';
-import { Observable, ReplaySubject, Subject, Subscription } from 'rxjs';
-import { combineLatest, share, filter } from 'rxjs/operators';
+import { Observable, ReplaySubject, Subject, Subscription, combineLatest } from 'rxjs';
+import { share, filter, map } from 'rxjs/operators';
 
 import { SelectorServiceInjector, SelectorService, Selectable, SelectorItem, SELECTOR_SERVICE_INJECTOR } from '../../services';
 
@@ -92,15 +92,18 @@ export class AfcSelectBase implements OnInit, OnChanges, OnDestroy, ControlValue
   constructor(
     protected injector: SelectorServiceInjector,
   ) {
-    this.subscriptions.add(this.dataPrepared$.pipe(filter(v => !!v)).pipe(
-      combineLatest(this.initialized$.pipe(filter(v => !!v))),
-      combineLatest(this.onChangeEventPrepared$.pipe(filter(v => !!v))),
-      combineLatest(this.writeValue$),
-    ).subscribe(v => {
-        let value = <any>v[1];
+    this.subscriptions.add(
+      combineLatest(
+        this.dataPrepared$.pipe(filter(v => !!v)),
+        this.initialized$.pipe(filter(v => !!v)),
+        this.onChangeEventPrepared$.pipe(filter(v => !!v)),
+        this.writeValue$
+      ).pipe(
+        map(v => v[3])
+      ).subscribe(value => {
         if (value || value === 0) {
-          if (typeof value === 'object' && value.forSelectValue) {
-            value = value.forSelectValue;
+          if (typeof value === 'object' && (<Selectable>value).forSelectValue) {
+            value = (<Selectable>value).forSelectValue;
           }
           this.innerFormControl.patchValue(value);
           if (!this.validateInnerFormValue()) {
@@ -111,15 +114,19 @@ export class AfcSelectBase implements OnInit, OnChanges, OnDestroy, ControlValue
           this.value = value;
         }
       }));
-    this.subscriptions.add(this.dataPrepared$.pipe(filter(v => !!v)).pipe(
-      combineLatest(this.initialized$.pipe(filter(v => !!v))),
-      combineLatest(this.onChangeEventPrepared$.pipe(filter(v => !!v))),
-      combineLatest(this.innerFormControl.valueChanges),
+    this.subscriptions.add(
+      combineLatest(
+        this.dataPrepared$.pipe(filter(v => !!v)),
+        this.initialized$.pipe(filter(v => !!v)),
+        this.onChangeEventPrepared$.pipe(filter(v => !!v)),
+        this.innerFormControl.valueChanges,
+    ).pipe(
+      map(v => v[3])
     ).subscribe(v => {
         if (this.data && this.valueType === 'object') {
-          v[1] = this.data.find(d => d.forSelectValue === v[1]);
+          v = this.data.find(d => d.forSelectValue === v);
         }
-        this.value = v[1];
+        this.value = v;
       }));
   }
 

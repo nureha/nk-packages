@@ -1,6 +1,7 @@
 import { Component, Input, forwardRef, Inject } from '@angular/core';
 import { NG_VALUE_ACCESSOR, FormControl } from '@angular/forms';
-import { filter, combineLatest } from 'rxjs/operators';
+import { combineLatest } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
 import { SelectorServiceInjector, Selectable, SELECTOR_SERVICE_INJECTOR } from '../../services';
 import { AfcSelectBase } from './select-base.component';
@@ -53,12 +54,13 @@ export class AfcSelectComponent extends AfcSelectBase {
     @Inject(SELECTOR_SERVICE_INJECTOR) protected injector: SelectorServiceInjector,
   ) {
     super(injector);
-    this.dataPrepared$.pipe(
-      filter(v => !!v),
-      combineLatest(this.innerFormControl.valueChanges)
-    ).subscribe(v => {
-      this.selected = this.data.find(d => d.forSelectValue === v[1]);
-    });
+    this.subscriptions.add(
+      combineLatest(
+        this.dataPrepared$.pipe(filter(v => !!v)),
+        this.innerFormControl.valueChanges
+      ).subscribe(v => {
+        this.selected = this.data.find(d => d.forSelectValue === v[1]);
+      }));
   }
 
 }

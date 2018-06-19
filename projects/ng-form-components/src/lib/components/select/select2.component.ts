@@ -1,7 +1,7 @@
 import { Component, Input, ViewChild, OnInit, AfterViewInit, OnDestroy, forwardRef, Inject } from '@angular/core';
 import { NG_VALUE_ACCESSOR, FormControl } from '@angular/forms';
-import { Subject, Subscription } from 'rxjs';
-import { filter, combineLatest, delay } from 'rxjs/operators';
+import { Subject, Subscription, combineLatest } from 'rxjs';
+import { filter, map, delay } from 'rxjs/operators';
 
 import { SelectorServiceInjector, Selectable, SELECTOR_SERVICE_INJECTOR } from '../../services';
 import { AfcSelectBase } from './select-base.component';
@@ -12,7 +12,9 @@ declare const jQuery: any;
   template: `
     <label><span [hidden]="!required">*&nbsp;</span>{{ label }}</label>
     <ng-container *ngIf="!readonly">
-      <afc-validate-message [control]="formControl" [name]="label"><ng-content></ng-content></afc-validate-message>
+      <afc-validate-message [control]="formControl" [name]="label">
+        <ng-content></ng-content>
+      </afc-validate-message>
       <div>
         <select #selector class="form-control"></select>
       </div>
@@ -66,16 +68,18 @@ export class AfcSelect2Component extends AfcSelectBase implements OnInit, AfterV
   ) {
     super(injector);
     this.mySubscriptions.add(
-      this.dataPrepared$.pipe(
-        combineLatest(this.preparedElement$),
-        filter(v => !!v[0] && !!v[1]),
-        combineLatest(this.valueTrigger$),
+      combineLatest(
+        this.dataPrepared$.pipe(filter(v => !!v)),
+        this.preparedElement$.pipe(filter(v => !!v)),
+        this.valueTrigger$
+      ).pipe(
+        map(v => v[2]),
         delay(0)
       ).subscribe(v => {
         if (this.element) {
-          this.element.val(v[1]).trigger('change').trigger('select2:select');
+          this.element.val(v).trigger('change').trigger('select2:select');
         }
-        this.selected = this._data.find(d => d.forSelectValue === v[1]);
+        this.selected = this._data.find(d => d.forSelectValue === v);
       })
     );
   }

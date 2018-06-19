@@ -1,6 +1,7 @@
 import { Component, Input, forwardRef, OnInit, Inject } from '@angular/core';
 import { NG_VALUE_ACCESSOR, FormControl } from '@angular/forms';
-import { filter, combineLatest, delay } from 'rxjs/operators';
+import { combineLatest } from 'rxjs';
+import { filter, delay } from 'rxjs/operators';
 
 import { FilterService } from '../../services';
 import { SelectorServiceInjector, Selectable, SELECTOR_SERVICE_INJECTOR } from '../../services';
@@ -83,12 +84,10 @@ export class AfcCheckboxComponent extends AfcSelectBase implements OnInit {
   ngOnInit() {
     super.ngOnInit();
     if (this.filter) {
-      this.subscriptions.add(this.dataPrepared$
-      .pipe(
-        filter(v => !!v),
-        combineLatest(this.filter.onChange),
-        delay(0)
-      )
+      this.subscriptions.add(combineLatest(
+        this.dataPrepared$.pipe(filter(v => !!v)),
+        this.filter.onChange
+      ).pipe(delay(0))
       .subscribe(v => {
         this.filteredData = this.filter.filter(this.data);
         // FIXME for magic number
