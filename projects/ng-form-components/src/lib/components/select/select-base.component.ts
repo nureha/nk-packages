@@ -86,7 +86,6 @@ export class AfcSelectBase implements OnInit, OnChanges, OnDestroy, ControlValue
   private initialized$ = new Subject();
   private onChangeEventPrepared$ = new Subject();
   private defaultValue: any = null;
-  private querySubscription: Subscription;
 
   onChangePropagate: any = () => {};
 
@@ -107,8 +106,9 @@ export class AfcSelectBase implements OnInit, OnChanges, OnDestroy, ControlValue
           if (!this.validateInnerFormValue()) {
             this.innerFormControl.patchValue(!this.defaultValue ? this.defaultValue : this.defaultValue.forSelectValue);
           }
-        } else if (this.innerFormControl.value || this.innerFormControl.value === 0) {
-          this.value = this.innerFormControl.value;
+        } else {
+          this.innerFormControl.reset(value);
+          this.value = value;
         }
       }));
     this.subscriptions.add(this.dataPrepared$.pipe(filter(v => !!v)).pipe(

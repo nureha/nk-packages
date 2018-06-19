@@ -205,4 +205,40 @@ describe('AfcSelectComponent', () => {
     expect(checkedInput[0].nativeElement.textContent).toContain('apple');
     expect(checkedInput[1].nativeElement.textContent).toContain('banana');
   }));
+  it('should be reset value if not required', fakeAsync(() => {
+    const SET_VALUE_FOR_CONTROL = 1;
+    fixture = TestBed.createComponent(OnlyAfcSelectComponent);
+    component = fixture.componentInstance;
+    component.formControl = new FormControl(SET_VALUE_FOR_CONTROL);
+    component.sourceName = 'fruit';
+    // 上記変更を反映
+    fixture.detectChanges();
+    // service の query 待ち
+    tick(1);
+    // 内部の値の変更を反映
+    fixture.detectChanges();
+    expect(component.formControl.value).toEqual(SET_VALUE_FOR_CONTROL);
+    component.formControl.reset();
+    tick();
+    expect(component.formControl.value).toEqual(null);
+    expect(fixture.debugElement.query(By.css('option:checked')).nativeElement.textContent).toBe('');
+  }));
+  it('should keep default value when reset required form', fakeAsync(() => {
+    const SET_VALUE_FOR_CONTROL = 1;
+    fixture = TestBed.createComponent(OnlyAfcSelectComponent);
+    component = fixture.componentInstance;
+    component.formControl = new FormControl(SET_VALUE_FOR_CONTROL, Validators.required);
+    component.sourceName = 'fruit';
+    // 上記変更を反映
+    fixture.detectChanges();
+    // service の query 待ち
+    tick(1);
+    // 内部の値の変更を反映
+    fixture.detectChanges();
+    expect(component.formControl.value).toEqual(SET_VALUE_FOR_CONTROL);
+    component.formControl.reset();
+    tick();
+    expect(component.formControl.value).toEqual(2);
+    expect(fixture.debugElement.query(By.css('option:checked')).nativeElement.textContent).toBe('orange');
+  }));
 });
